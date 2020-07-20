@@ -3,7 +3,9 @@ package io.github.ukihsoroy.bigdata.framework.kafka.impl
 import java.util.Properties
 
 import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.KafkaSink
+import io.github.ukihsoroy.bigdata.framework.EmrComputable
 import io.github.ukihsoroy.bigdata.framework.kafka.TKafkaRepository
+import io.github.ukihsoroy.bigdata.framework.spark.Sparkle
 import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.streaming.StreamingContext
@@ -12,13 +14,16 @@ import org.apache.spark.streaming.kafka010.ConsumerStrategies._
 import org.apache.spark.streaming.kafka010.KafkaUtils
 import org.apache.spark.streaming.kafka010.LocationStrategies._
 
-trait SparkTKafkaRepositoryImpl[B] extends TKafkaRepository[StreamingContext, DStream[B]] {
+trait SparkTKafkaRepositoryImpl[B] extends TKafkaRepository[Sparkle, DStream[B]] {
 
   protected def transJson2Bean(jsonStream: DStream[String]): DStream[B]
 
   protected def transBean2Json(beanStream: DStream[B]): DStream[String]
 
-  override def readStream(implicit env: StreamingContext): DStream[B] = {
+  override def readStream(implicit env: Sparkle): DStream[B] = {
+    val bootstrapServers = env.getParameter("kafka.bootstrap.servers")
+    val groupId = env.getParameter("kafka.group.id")
+    val topic = env.getParameter("kafka.topic")
     val kafkaParams: Map[String, Object] = Map[String, Object](
       "bootstrap.servers" -> BOOTSTRAP_SERVERS,
       "key.deserializer" -> classOf[StringDeserializer],
@@ -33,7 +38,7 @@ trait SparkTKafkaRepositoryImpl[B] extends TKafkaRepository[StreamingContext, DS
     println(s"topic:$TOPIC")
 
     val jsonStream = KafkaUtils.createDirectStream[String, String](
-      env,
+      env.ssc,
       PreferConsistent,
       Subscribe[String, String](TOPIC.split(","), kafkaParams)
     ).map(_.value)
@@ -41,7 +46,7 @@ trait SparkTKafkaRepositoryImpl[B] extends TKafkaRepository[StreamingContext, DS
   }
 
   override def writeStream(result: DStream[B])
-                          (implicit env: StreamingContext): Unit = {
+                          (implicit env: Sparkle): Unit = {
 
     println("init kafka producer")
 
@@ -53,7 +58,7 @@ trait SparkTKafkaRepositoryImpl[B] extends TKafkaRepository[StreamingContext, DS
         p.put("value.serializer", classOf[StringSerializer])
         p
       }
-      env.sparkContext.broadcast(KafkaSink[String, String](kafkaProducerConfig))
+      env.sc.broadcast(KafkaSink[String, String](kafkaProducerConfig))
     }
 
     println(s"write to : $BOOTSTRAP_SERVERS, topic: $TOPIC")
