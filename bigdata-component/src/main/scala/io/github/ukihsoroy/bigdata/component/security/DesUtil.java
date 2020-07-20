@@ -1,7 +1,5 @@
 package io.github.ukihsoroy.bigdata.component.security;
 
-import io.github.ukihsoroy.help.Base64Helper;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;

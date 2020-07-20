@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>prototype-bigdata</artifactId>
-        <groupId>io.github.ukihsoroy</groupId>
-        <version>1.0.0.SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common-bigdata</artifactId>
+    <groupId>io.github.ukihsoroy</groupId>
+    <artifactId>prototype-bigdata</artifactId>
+    <version>1.0.0.SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>common-bigdata</name>
+
+    <name>prototype-bigdata</name>
+
     <modules>
         <module>bigdata-component</module>
         <module>bigdata-framework</module>
@@ -22,6 +21,51 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <scalaj.version>2.3.0</scalaj.version>
         <logback.version>1.1.7</logback.version>
+        <scala.binary.version>2.11</scala.binary.version>
+        <maven.plugin.version>3.8.0</maven.plugin.version>
+        <curator.framework.version>4.0.1</curator.framework.version>
+        <protostuff.version>1.6.0</protostuff.version>
+        <disruptor.version>3.4.2</disruptor.version>
+        <mica.auto.version>1.1.0</mica.auto.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
+        <cdh.version>cdh6.2.0</cdh.version>
+        <scala.version>2.11.12</scala.version>
+        <hadoop.version>3.0.0-${cdh.version}</hadoop.version>
+        <spark.version>2.4.0-${cdh.version}</spark.version>
+        <hbase.version>2.1.0-${cdh.version}</hbase.version>
+        <hive.version>2.1.1-${cdh.version}</hive.version>
+        <flume.version>1.8.0-${cdh.version}</flume.version>
+        <kafka.version>2.0.0-${cdh.version}</kafka.version>
+        <flink.version>1.8.0</flink.version>
+        <zookeeper.version>3.4.5-${cdh.version}</zookeeper.version>
+        <mysql.version>5.1.47</mysql.version>
+        <poi.version>3.17</poi.version>
+        <opencsv.version>4.2</opencsv.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <jupyter.version>5.3.0</jupyter.version>
+        <streaming.kafka.version>1.6.3</streaming.kafka.version>
+        <httpclient.version>3.1</httpclient.version>
+        <jedis.version>3.1.0</jedis.version>
+        <redisson.version>3.12.0</redisson.version>
+
+        <!--工具类-->
+        <fastjson.version>1.2.72</fastjson.version>
+        <guava.version>28.1-jre</guava.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-io.version>2.6</commons-io.version>
+        <commons-codec.version>1.13</commons-codec.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons-math3.version>3.6.1</commons-math3.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+
+        <!--junit-->
+        <junit.version>5.5.2</junit.version>
+
+        <!--log-->
+        <slf4j.version>1.7.29</slf4j.version>
     </properties>
 
     <dependencies>
@@ -29,12 +73,6 @@
             <groupId>org.scalaj</groupId>
             <artifactId>scalaj-http_2.10</artifactId>
             <version>${scalaj.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.ukihsoroy</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!--Hadoop 依赖-->
@@ -85,6 +123,12 @@
             <version>${flink.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
 
         <!--HBase Client客户端-->
         <dependency>
@@ -116,6 +160,22 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalaj</groupId>
+            <artifactId>scalaj-http_2.10</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
         </dependency>
 
         <!--logback-->
@@ -194,8 +254,50 @@
                     <source>8</source>
                     <target>8</target>
                     <encoding>UTF-8</encoding>
+                    <source>src/main/scala</source>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <!--aliyun-->
+        <repository>
+            <id>aliyun-repos</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!--cdh-->
+        <repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyun-plugin</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>Nexus ReleaseRepository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Nexus SnapshotRepository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>

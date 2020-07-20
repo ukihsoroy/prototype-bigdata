@@ -2,7 +2,7 @@ package io.github.ukihsoroy.bigdata.framework.enums
 
 object MaxwellType extends Enumeration {
   type MaxwellTypeEnum = Value
-  val INSERT = Value("insert")
-  val UPDATE = Value("update")
-  val DELETE = Value("delete")
+  val INSERT: MaxwellType.Value = Value("insert")
+  val UPDATE: MaxwellType.Value = Value("update")
+  val DELETE: MaxwellType.Value = Value("delete")
 }
