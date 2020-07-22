@@ -11,19 +11,19 @@ import jodd.util.StringPool
  * @author K.O <br>
  * @version 1.0 <br>
  */
-trait EmrComputable(args: Array[String]) {
+trait EmrComputable {
 
   /**
    * emr参数初始化
    */
-  private var emrParams: Map[String, String] = buildEmrParams(args)
+  protected var emrParams: Map[String, String] = _
 
   /**
    * env初始化
    */
-  private var envParams: Properties = buildEnvParams()
+  protected var envParams: Properties = _
 
-  private def buildEnvParams(): Properties = {
+  protected [spark] def buildEnvParams(): Properties = {
     new Properties()
   }
 
@@ -32,7 +32,7 @@ trait EmrComputable(args: Array[String]) {
    * @param args
    * @return
    */
-  private def buildEmrParams(args: Array[String]): Map[String, String] = {
+  protected [spark] def buildEmrParams(args: Array[String]): Map[String, String] = {
     (
       for {
         arg <- args if arg.contains(StringPool.EQUALS)

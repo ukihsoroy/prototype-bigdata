@@ -1,10 +1,7 @@
 package io.github.ukihsoroy.bigdata.framework.spark
 
-import java.util.Properties
-
 import io.github.ukihsoroy.bigdata.framework.EmrComputable
 import io.github.ukihsoroy.bigdata.framework.enums.{EnvType, SparkType}
-import jodd.util.StringPool
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -16,7 +13,7 @@ import org.apache.spark.{SparkConf, SparkContext}
  * @author K.O <br>
  * @version 1.0 <br>
  */
-class Sparkle(args: Array[String]) extends EmrComputable(args: Array[String]) {
+class Sparkle(args: Array[String]) extends EmrComputable {
 
   var conf: SparkConf = _
 
@@ -27,6 +24,10 @@ class Sparkle(args: Array[String]) extends EmrComputable(args: Array[String]) {
   var ssc: StreamingContext = _
 
   {
+
+    emrParams = buildEmrParams(args)
+
+    envParams = buildEnvParams()
 
     conf = new SparkConf()
 
