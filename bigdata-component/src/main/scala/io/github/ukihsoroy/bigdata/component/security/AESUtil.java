@@ -19,10 +19,10 @@ public class AESUtil {
         try {
             if(key != null && !"".equals(source) && source != null) {
                 byte[] e = produceKey(key).getBytes();
-                SecretKeySpec skeySpec = new SecretKeySpec(e, "AES");
-                byte[] initParam = "XINYAN-AES000000".getBytes();
+                SecretKeySpec skeySpec = new SecretKeySpec(e, KEY_ALGORITHM);
+                byte[] initParam = IV_STRING.getBytes();
                 IvParameterSpec ivParameterSpec = new IvParameterSpec(initParam);
-                Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
                 cipher.init(1, skeySpec, ivParameterSpec);
                 byte[] encrypted = cipher.doFinal(source.getBytes(Charset.forName("UTF-8")));
                 return Base64Helper.encodeToString(encrypted);

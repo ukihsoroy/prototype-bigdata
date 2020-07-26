@@ -24,7 +24,6 @@ class Sparkle(args: Array[String]) extends EmrComputable {
   var ssc: StreamingContext = _
 
   {
-
     emrParams = buildEmrParams(args)
 
     envParams = buildEnvParams()
@@ -49,7 +48,6 @@ class Sparkle(args: Array[String]) extends EmrComputable {
     } else {
       println("other...")
     }
-
   }
 }
 
