@@ -3,10 +3,10 @@ package io.github.ukihsoroy.bigdata.framework.kafka.predefined
 import com.alibaba.fastjson.JSON
 import io.github.ukihsoroy.bigdata.component.util.JavaJsonUtil
 import io.github.ukihsoroy.bigdata.framework.bean.MaxwellBean
-import io.github.ukihsoroy.bigdata.framework.kafka.impl.FlinkTKafkaRepositoryImpl
+import io.github.ukihsoroy.bigdata.framework.kafka.impl.FlinkKafkaRepositoryImpl
 import org.apache.flink.streaming.api.scala._
 
-abstract class FlinkMaxwellKafkaRepositoryImpl extends FlinkTKafkaRepositoryImpl[MaxwellBean] {
+abstract class FlinkMaxwellKafkaRepositoryImpl extends FlinkKafkaRepositoryImpl[MaxwellBean] {
 
   override protected def transJson2Bean(jsonStream: DataStream[String]): DataStream[MaxwellBean] = {
     jsonStream.flatMap {

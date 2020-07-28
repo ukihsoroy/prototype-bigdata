@@ -7,7 +7,7 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer, FlinkKafkaProducer}
 
-trait FlinkTKafkaRepositoryImpl[B] extends TKafkaRepository[StreamExecutionEnvironment, DataStream[B]] {
+trait FlinkKafkaRepositoryImpl[B] extends TKafkaRepository[StreamExecutionEnvironment, DataStream[B]] {
 
   protected def transJson2Bean(jsonStream: DataStream[String]): DataStream[B]
 

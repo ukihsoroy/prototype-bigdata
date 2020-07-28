@@ -14,7 +14,7 @@ import org.apache.spark.streaming.kafka010.ConsumerStrategies._
 import org.apache.spark.streaming.kafka010.KafkaUtils
 import org.apache.spark.streaming.kafka010.LocationStrategies._
 
-trait SparkTKafkaRepositoryImpl[B] extends TKafkaRepository[Sparkle, DStream[B]] {
+trait SparkKafkaRepositoryImpl[B] extends TKafkaRepository[Sparkle, DStream[B]] {
 
   protected def transJson2Bean(jsonStream: DStream[String]): DStream[B]
 
