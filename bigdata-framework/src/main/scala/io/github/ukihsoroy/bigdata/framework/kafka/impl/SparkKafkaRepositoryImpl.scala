@@ -2,7 +2,7 @@ package io.github.ukihsoroy.bigdata.framework.kafka.impl
 
 import java.util.Properties
 
-import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.KafkaSink
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.kafka.KafkaSink
 import io.github.ukihsoroy.bigdata.framework.EmrComputable
 import io.github.ukihsoroy.bigdata.framework.kafka.TKafkaRepository
 import io.github.ukihsoroy.bigdata.framework.spark.Sparkle

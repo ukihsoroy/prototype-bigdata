@@ -1,4 +1,4 @@
-package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks
+package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.hbase
 
 import com.alibaba.fastjson.JSONObject
 import org.apache.hadoop.hbase.client._

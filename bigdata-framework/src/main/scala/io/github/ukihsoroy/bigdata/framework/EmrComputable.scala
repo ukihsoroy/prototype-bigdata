@@ -21,25 +21,16 @@ trait EmrComputable {
   /**
    * env初始化
    */
-  protected var envParams: Properties = _
+  protected var envParams: Map[String, String] = _
 
-  protected [spark] def buildEnvParams(): Properties = {
-    new Properties()
-  }
+  protected def buildEnvParams(): Map[String, String]
 
   /**
    * 构建Emr参数
    * @param args
    * @return
    */
-  protected [spark] def buildEmrParams(args: Array[String]): Map[String, String] = {
-    (
-      for {
-        arg <- args if arg.contains(StringPool.EQUALS)
-        kv = arg.split(StringPool.EQUALS)
-      } yield (kv(0), kv(1))
-      ).toMap
-  }
+  protected def buildEmrParams(args: Array[String]): Map[String, String]
 
   /**
    * 获取参数值
@@ -47,6 +38,6 @@ trait EmrComputable {
    * @param default
    * @return
    */
-  def getParameter(key: String, default: String = ""): String = emrParams.getOrElse(key, envParams.getProperty(key, default))
+  def getParameter(key: String, default: String = ""): String = emrParams.getOrElse(key, envParams.getOrElse(key, default))
 
 }

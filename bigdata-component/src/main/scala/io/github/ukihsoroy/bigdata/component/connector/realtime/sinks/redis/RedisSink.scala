@@ -1,4 +1,4 @@
-package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks
+package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.redis
 
 import java.util
 

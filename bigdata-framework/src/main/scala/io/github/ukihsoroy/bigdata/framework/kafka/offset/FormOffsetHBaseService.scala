@@ -1,7 +1,7 @@
 package io.github.ukihsoroy.bigdata.framework.kafka.offset
 
 /**
- * description: FormOffsertHBaseService <br>
+ * description: FormOffsetHBaseService <br>
  * date: 7/28/2020 21:17 <br>
  *
  * @author K.O <br>

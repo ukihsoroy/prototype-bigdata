@@ -1,4 +1,4 @@
-package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks
+package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.kafka
 
 import java.util.concurrent.Future
 
@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord, RecordM
 
 
 class KafkaSink[K, V](createProducer: () => KafkaProducer[K, V]) extends Serializable {
-  lazy val producer = createProducer()
+  lazy val producer: KafkaProducer[K, V] = createProducer()
 
   def send(topic: String, key: K, value: V): Future[RecordMetadata] =
     producer.send(new ProducerRecord[K, V](topic, key, value))

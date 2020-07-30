@@ -1,7 +1,7 @@
 package io.github.ukihsoroy.bigdata.component.connector.realtime.worker
 
 import com.alibaba.fastjson.JSONObject
-import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.KafkaSink
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.kafka.KafkaSink
 import io.github.ukihsoroy.bigdata.component.util.DateUtil
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.streaming.Time

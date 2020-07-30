@@ -1,6 +1,8 @@
 package io.github.ukihsoroy.bigdata.component.connector.realtime.broadcast
 
-import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.{HBaseSink, KafkaSink, MysqlSink}
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.hbase.HBaseSink
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.kafka.KafkaSink
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.mysql.MysqlSink
 import org.apache.spark.broadcast.Broadcast
 
 

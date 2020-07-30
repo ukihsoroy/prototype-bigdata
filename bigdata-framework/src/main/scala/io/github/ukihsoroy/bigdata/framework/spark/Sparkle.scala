@@ -1,7 +1,10 @@
 package io.github.ukihsoroy.bigdata.framework.spark
 
+import java.util.Properties
+
 import io.github.ukihsoroy.bigdata.framework.EmrComputable
 import io.github.ukihsoroy.bigdata.framework.enums.{EnvType, SparkType}
+import jodd.util.StringPool
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -48,6 +51,24 @@ class Sparkle(args: Array[String]) extends EmrComputable {
     } else {
       println("other...")
     }
+  }
+
+  protected def buildEnvParams(): Map[String, String] = {
+    null
+  }
+
+  /**
+   * 构建Emr参数
+   * @param args
+   * @return
+   */
+  protected def buildEmrParams(args: Array[String]): Map[String, String] = {
+    (
+      for {
+        arg <- args if arg.contains(StringPool.EQUALS)
+        kv = arg.split(StringPool.EQUALS)
+      } yield (kv(0), kv(1))
+      ).toMap
   }
 }
 

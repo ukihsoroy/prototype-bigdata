@@ -2,7 +2,10 @@ package io.github.ukihsoroy.bigdata.component.connector.realtime
 
 import java.util.Properties
 
-import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.{HBaseSink, KafkaSink, MysqlSink, RedisSink}
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.hbase.HBaseSink
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.kafka.KafkaSink
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.mysql.MysqlSink
+import io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.redis.RedisSink
 import org.apache.kafka.common.serialization.StringSerializer
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.{SparkConf, SparkContext}
