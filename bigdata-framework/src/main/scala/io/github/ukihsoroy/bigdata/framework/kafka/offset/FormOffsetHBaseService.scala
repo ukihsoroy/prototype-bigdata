@@ -9,4 +9,5 @@ package io.github.ukihsoroy.bigdata.framework.kafka.offset
  */
 object FormOffsetHBaseService {
 
+
 }
