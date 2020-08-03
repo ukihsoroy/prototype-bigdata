@@ -1,6 +1,6 @@
 package io.github.ukihsoroy.bigdata.framework.spark
 
-import java.util.Properties
+import java.util.{Properties, ResourceBundle}
 
 import io.github.ukihsoroy.bigdata.framework.EmrComputable
 import io.github.ukihsoroy.bigdata.framework.enums.{EnvType, SparkType}
@@ -8,6 +8,8 @@ import jodd.util.StringPool
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
+
+import scala.collection.mutable
 
 /**
  * description: Sparkle <br>
@@ -29,11 +31,11 @@ class Sparkle(args: Array[String]) extends EmrComputable {
   {
     emrParams = buildEmrParams(args)
 
-    envParams = buildEnvParams()
+    val env = getParameter("env", "dev")
+    envParams = buildEnvParams(env)
 
     conf = new SparkConf()
 
-    val env = getParameter("env", "dev")
     if (EnvType.DEV.toString.equals(env)) {
       conf.setAppName(getParameter("app.name")).setMaster("local[2]")
     } else {
@@ -53,8 +55,16 @@ class Sparkle(args: Array[String]) extends EmrComputable {
     }
   }
 
-  protected def buildEnvParams(): Map[String, String] = {
-    null
+  override protected def buildEnvParams(env: String): Map[String, String] = {
+    val resource = ResourceBundle.getBundle(s"$env/application")
+    val keys = resource.keySet().iterator()
+    val envMap = mutable.Map[String, String]()
+    while (keys.hasNext) {
+      val key = keys.next()
+      val value = resource.getString(key)
+      envMap.put(key, value)
+    }
+    envMap.toMap
   }
 
   /**
@@ -62,7 +72,7 @@ class Sparkle(args: Array[String]) extends EmrComputable {
    * @param args
    * @return
    */
-  protected def buildEmrParams(args: Array[String]): Map[String, String] = {
+  override protected def buildEmrParams(args: Array[String]): Map[String, String] = {
     (
       for {
         arg <- args if arg.contains(StringPool.EQUALS)
@@ -75,5 +85,5 @@ class Sparkle(args: Array[String]) extends EmrComputable {
 object Sparkle {
 
   def apply(args: Array[String]): Sparkle = new Sparkle(args)
-  
+
 }

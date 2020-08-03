@@ -9,6 +9,4 @@ package io.github.ukihsoroy.bigdata.component.constants
  */
 object AppConst {
 
-
-
 }

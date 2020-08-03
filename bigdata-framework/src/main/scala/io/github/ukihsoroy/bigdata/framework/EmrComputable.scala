@@ -23,7 +23,7 @@ trait EmrComputable {
    */
   protected var envParams: Map[String, String] = _
 
-  protected def buildEnvParams(): Map[String, String]
+  protected def buildEnvParams(env: String): Map[String, String]
 
   /**
    * 构建Emr参数
