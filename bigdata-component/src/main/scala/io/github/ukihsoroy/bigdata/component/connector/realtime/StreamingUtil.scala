@@ -12,7 +12,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 object StreamingUtil {
 
-  def getKafkaPrdcerBroadcast(sc: SparkContext, zkHost: String): Broadcast[KafkaSink[String, String]] = {
+  def getKafkaProducerBroadcast(sc: SparkContext, zkHost: String): Broadcast[KafkaSink[String, String]] = {
     val kafkaProducer: Broadcast[KafkaSink[String, String]] = {
       val kafkaProducerConfig = {
         val p = new Properties()
@@ -36,14 +36,14 @@ object StreamingUtil {
 
   def getMySqlConnBroadcast(sc: SparkContext): Broadcast[MysqlSink] = {
     val conf = sc.getConf
-    if (checkConf(conf, "spark.mysql.host") && checkConf(conf, "spark.mysql.port")
-      && checkConf(conf, "spark.mysql.db") && checkConf(conf, "spark.mysql.user")
-      && checkConf(conf, "spark.mysql.pwd")) {
-      val host = sc.getConf.get("spark.mysql.host")
-      val port = sc.getConf.get("spark.mysql.port")
-      val db = sc.getConf.get("spark.mysql.db")
-      val user = sc.getConf.get("spark.mysql.user")
-      val pwd = sc.getConf.get("spark.mysql.pwd")
+    if (checkConf(conf, "mysql.host") && checkConf(conf, "mysql.port")
+      && checkConf(conf, "mysql.db") && checkConf(conf, "mysql.username")
+      && checkConf(conf, "mysql.password")) {
+      val host = sc.getConf.get("mysql.host")
+      val port = sc.getConf.get("mysql.port")
+      val db = sc.getConf.get("mysql.db")
+      val user = sc.getConf.get("mysql.username")
+      val pwd = sc.getConf.get("mysql.password")
       getMySqlConnBroadcast(sc, host, port, db, user, pwd)
     }
     else {
@@ -57,9 +57,9 @@ object StreamingUtil {
 
   def getRedisPoolBroadcast(sc: SparkContext): Broadcast[RedisSink] = {
     val conf = sc.getConf
-    if (checkConf(conf, "spark.redis.masterName") && checkConf(conf, "spark.redis.hostAndPort")) {
-      val masterName = conf.get("spark.redis.masterName")
-      val hostAndPort = conf.get("spark.redis.hostAndPort")
+    if (checkConf(conf, "redis.masterName") && checkConf(conf, "redis.hostAndPort")) {
+      val masterName = conf.get("redis.masterName")
+      val hostAndPort = conf.get("redis.hostAndPort")
       getRedisPoolBroadcast(sc, masterName, hostAndPort)
     }
     else {
@@ -70,22 +70,22 @@ object StreamingUtil {
 
   def getHBaseConnBroadcast(sc: SparkContext): Broadcast[HBaseSink] = {
     val conf = sc.getConf
-    if (checkConf(conf, "spark.hbase.host") && checkConf(conf, "spark.hbase.config")) {
-      val zkHost = conf.get("spark.hbase.host")
-      val confFile = conf.get("spark.hbase.config")
+    if (checkConf(conf, "hbase.host") && checkConf(conf, "hbase.config")) {
+      val zkHost = conf.get("hbase.host")
+      val confFile = conf.get("hbase.config")
       getHBaseConnBroadcast(sc, zkHost, confFile)
     } else {
       getHBaseConnBroadcast(sc, "", "")
     }
   }
 
-  def getKafkaPrdcerBroadcast(sc: SparkContext): Broadcast[KafkaSink[String, String]] = {
+  def getKafkaProducerBroadcast(sc: SparkContext): Broadcast[KafkaSink[String, String]] = {
     val conf = sc.getConf
-    if (checkConf(conf, "spark.kafka.host")) {
-      val zkHost = sc.getConf.get("spark.kafka.host")
-      getKafkaPrdcerBroadcast(sc, zkHost)
+    if (checkConf(conf, "bootstrap.servers")) {
+      val zkHost = sc.getConf.get("bootstrap.servers")
+      getKafkaProducerBroadcast(sc, zkHost)
     } else {
-      getKafkaPrdcerBroadcast(sc, "")
+      getKafkaProducerBroadcast(sc, "")
     }
   }
 

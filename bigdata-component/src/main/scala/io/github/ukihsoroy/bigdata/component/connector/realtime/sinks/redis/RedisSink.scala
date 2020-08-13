@@ -3,13 +3,14 @@ package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.redis
 import java.util
 
 import org.redisson.Redisson
+import org.redisson.api.RedissonClient
 import org.redisson.config.Config
 import redis.clients.jedis.{HostAndPort, Jedis, JedisCluster, JedisSentinelPool}
 
 import scala.collection.JavaConversions._
 
 class RedisSink(masterName: String, hostAndPort: String) {
-  lazy val sentinelPool = {
+  lazy val sentinelPool: JedisSentinelPool = {
 
     // 数据库链接池配置
     //    val config = new JedisPoolConfig()
@@ -45,7 +46,7 @@ class RedisSink(masterName: String, hostAndPort: String) {
     new JedisSentinelPool(masterName, sentinels)
   }
 
-  lazy val cluster = {
+  lazy val cluster: JedisCluster = {
     val nodes = new util.HashSet[HostAndPort]()
     hostAndPort.split(",").foreach {
       x =>
@@ -55,7 +56,7 @@ class RedisSink(masterName: String, hostAndPort: String) {
     new JedisCluster(nodes)
   }
 
-  lazy val slotAndHost = {
+  lazy val slotAndHost: util.TreeMap[Long, String] = {
     val nodes = new util.HashSet[HostAndPort]()
     hostAndPort.split(",").foreach {
       x =>
@@ -81,7 +82,7 @@ class RedisSink(masterName: String, hostAndPort: String) {
     slotHostMap
   }
 
-  lazy val redission = {
+  lazy val redission: RedissonClient = {
     val nodes = hostAndPort.split(",").map(x => s"redis://$x")
     val config = new Config()
     config.useClusterServers()

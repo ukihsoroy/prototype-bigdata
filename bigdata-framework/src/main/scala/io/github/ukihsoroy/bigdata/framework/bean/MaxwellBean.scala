@@ -53,11 +53,11 @@ class MaxwellBean extends Serializable {
   @BeanProperty
   var old: String = _
 
-  override def toString = {
+  override def toString: String = {
     s"$database,$table," + this.`type` + s",$data,$ts,$xid,$commit,$old"
   }
 
-  def toJSONString = {
+  def toJSONString: String = {
     val json = new JSONObject()
     json.put("database", database)
     json.put("table", table)

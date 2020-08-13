@@ -1,6 +1,7 @@
 package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.hbase
 
 import com.alibaba.fastjson.JSONObject
+import io.github.ukihsoroy.bigdata.component.util.StringUtil
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{HBaseConfiguration, HConstants, TableName}
@@ -9,11 +10,13 @@ import scala.collection.JavaConversions._
 import scala.util.Try
 import scala.util.control.Breaks
 
-class HBaseSink(zhHost: String, confFile: String) extends Serializable {
-  lazy val connection = {
+class HBaseSink(zhHost: String, confFile: String = null) extends Serializable {
+  lazy val connection: Connection = {
     val hbaseConf = HBaseConfiguration.create()
     hbaseConf.set(HConstants.ZOOKEEPER_QUORUM, zhHost)
-    hbaseConf.addResource(confFile)
+    if (StringUtil.isNotNull(confFile)) {
+      hbaseConf.addResource(confFile)
+    }
     val conn = ConnectionFactory.createConnection(hbaseConf)
     sys.addShutdownHook {
       conn.close()
@@ -26,23 +29,23 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
     connection.getTable(tableName)
   }
 
-  def close() = {
+  def close(): Unit = {
     connection.close()
   }
 
   /**
     * 判断指定 rowkey 的数据是否存在
     *
-    * @param htable hbase 表
+    * @param name hbase 表
     * @param rowkey 主键
     * @return 是否存在
     */
-  def isExist(htable: String, rowkey: String): Boolean = {
-    connection.getTable(TableName.valueOf(htable)).exists(new Get(Bytes.toBytes(rowkey)))
+  def isExist(name: String, rowkey: String): Boolean = {
+    connection.getTable(TableName.valueOf(name)).exists(new Get(Bytes.toBytes(rowkey)))
   }
 
-  def get(rowkey: String, htable: String, colFamily: String, cols: Seq[String]): Option[JSONObject] = {
-    val table = connection.getTable(TableName.valueOf(htable))
+  def get(rowkey: String, name: String, colFamily: String, cols: Seq[String]): Option[JSONObject] = {
+    val table = connection.getTable(TableName.valueOf(name))
     val get = new Get(Bytes.toBytes(rowkey))
     cols.foreach(c => get.addColumn(Bytes.toBytes(colFamily), Bytes.toBytes(c)))
 
@@ -60,8 +63,8 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
   }
 
   @deprecated("批量get没有判断是否存在,有NullPointerException风险")
-  def get(rowkeys: Seq[String], htable: String, colFamily: String, cols: Seq[String]): Iterable[JSONObject] = {
-    val table = connection.getTable(TableName.valueOf(htable))
+  def get(rowkeys: Seq[String], name: String, colFamily: String, cols: Seq[String]): Iterable[JSONObject] = {
+    val table = connection.getTable(TableName.valueOf(name))
     val gets = rowkeys.map {
       rowkey =>
         val get = new Get(Bytes.toBytes(rowkey))
@@ -201,13 +204,13 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
     resultObj
   }
 
-  def put(rowkey: String, htable: String, colFamily: String, value: JSONObject): Unit = {
+  def put(rowkey: String, name: String, colFamily: String, value: JSONObject): Unit = {
     val put = new Put(Bytes.toBytes(rowkey))
     value.entrySet().toList.foreach {
       entry =>
         put.addColumn(Bytes.toBytes("info"), Bytes.toBytes(entry.getKey), Bytes.toBytes(String.valueOf(entry.getValue)))
     }
-    val params = new BufferedMutatorParams(TableName.valueOf(htable)) //.writeBufferSize(6 * 1024 * 1024)
+    val params = new BufferedMutatorParams(TableName.valueOf(name)) //.writeBufferSize(6 * 1024 * 1024)
     val mutator = connection.getBufferedMutator(params)
     Try {
       mutator.mutate(put)
@@ -215,7 +218,7 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
     }.getOrElse(mutator.close())
   }
 
-  def put(rowkey: String, htable: String, value: JSONObject, isRemoveEmpty: Boolean = false, colFamily: String = "info"): Unit = {
+  def put(rowkey: String, name: String, value: JSONObject, isRemoveEmpty: Boolean = false, colFamily: String = "info"): Unit = {
     val put = new Put(Bytes.toBytes(rowkey))
     value.entrySet().toList.foreach {
       entry =>
@@ -227,7 +230,7 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
           put.addColumn(Bytes.toBytes(colFamily), Bytes.toBytes(entry.getKey), Bytes.toBytes(String.valueOf(entry.getValue)))
         }
     }
-    val params = new BufferedMutatorParams(TableName.valueOf(htable)) //.writeBufferSize(6 * 1024 * 1024)
+    val params = new BufferedMutatorParams(TableName.valueOf(name)) //.writeBufferSize(6 * 1024 * 1024)
     val mutator = connection.getBufferedMutator(params)
     Try {
       mutator.mutate(put)
@@ -235,7 +238,7 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
     }.getOrElse(mutator.close())
   }
 
-  def put(htable: String, colFamily: String, values: Seq[JSONObject]): Unit = {
+  def put(name: String, colFamily: String, values: Seq[JSONObject]): Unit = {
     val puts = values.map {
       data =>
         //rowkey
@@ -243,11 +246,11 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
         val put = new Put(Bytes.toBytes(rowKey))
         data.entrySet().toList.foreach {
           entry =>
-            put.addColumn(Bytes.toBytes("info"), Bytes.toBytes(entry.getKey), Bytes.toBytes(String.valueOf(entry.getValue)))
+            put.addColumn(Bytes.toBytes(colFamily), Bytes.toBytes(entry.getKey), Bytes.toBytes(String.valueOf(entry.getValue)))
         }
         put
     }
-    val params = new BufferedMutatorParams(TableName.valueOf(htable)) //.writeBufferSize(6 * 1024 * 1024)
+    val params = new BufferedMutatorParams(TableName.valueOf(name)) //.writeBufferSize(6 * 1024 * 1024)
     val mutator = connection.getBufferedMutator(params)
     Try {
       mutator.mutate(puts)
@@ -255,7 +258,7 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
     }.getOrElse(mutator.close())
   }
 
-  def putCento(htable: String, colFamily: String, values: Seq[JSONObject]): Unit = {
+  def putCento(name: String, colFamily: String, values: Seq[JSONObject]): Unit = {
     val puts = values.map {
       data =>
         //rowkey
@@ -264,7 +267,7 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
         put.addColumn(Bytes.toBytes(colFamily), Bytes.toBytes("cento"), Bytes.toBytes(data.toJSONString))
         put
     }
-    val params = new BufferedMutatorParams(TableName.valueOf(htable))
+    val params = new BufferedMutatorParams(TableName.valueOf(name))
     val mutator = connection.getBufferedMutator(params)
     Try {
       mutator.mutate(puts)
@@ -272,8 +275,8 @@ class HBaseSink(zhHost: String, confFile: String) extends Serializable {
     }.getOrElse(mutator.close())
   }
 
-  def delete(rowkey: String, htable: String): Unit = {
-    val table = connection.getTable(TableName.valueOf(htable))
+  def delete(rowkey: String, name: String): Unit = {
+    val table = connection.getTable(TableName.valueOf(name))
     val delete = new Delete(Bytes.toBytes(rowkey))
     table.delete(delete)
     table.close()

@@ -9,4 +9,18 @@ package io.github.ukihsoroy.bigdata.component.constants
  */
 object AppConst {
 
+  // mysql
+  val mysqlHost = "mysql.host"
+  val mysqlPort = "mysql.port"
+  val mysqlDatabase = "mysql.database"
+  val mysqlUsername = "mysql.username"
+  val mysqlPassword = "mysql.password"
+
+  // kafka
+  val bootstrapServers = "bootstrap.servers"
+
+  // redis
+  val redisMasterName = "redis.masterName"
+  val redisHostAndPort = "redis.hostAndPort"
+
 }

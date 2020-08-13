@@ -1,9 +1,9 @@
 package io.github.ukihsoroy.bigdata.component.connector.realtime.sinks.mysql
 
-import java.sql.DriverManager
+import java.sql.{Connection, DriverManager}
 
 class MysqlSink(host: String, port: String, db: String, user: String, pwd: String) extends Serializable {
-  lazy val connection = {
+  lazy val connection: Connection = {
     val connStr = s"jdbc:mysql://$host:$port/$db"
     val conn = DriverManager.getConnection(connStr, user, pwd)
     sys.addShutdownHook {
@@ -12,7 +12,13 @@ class MysqlSink(host: String, port: String, db: String, user: String, pwd: Strin
     conn
   }
 
-
+  /**
+   *
+   * @param sql sql
+   * @param dataMapper mapper
+   * @tparam T
+   * @return
+   */
   def query[T](sql: String)(implicit dataMapper: DataMapper[T]): Option[Seq[T]] = {
     val ps = connection.prepareStatement(sql)
     Class.forName("com.mysql.jdbc.Driver")

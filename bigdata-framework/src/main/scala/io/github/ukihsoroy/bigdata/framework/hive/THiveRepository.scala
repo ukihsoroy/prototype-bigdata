@@ -19,7 +19,7 @@ trait THiveRepository[E, R] extends Repositable with Serializable {
   /**
     * 全表名
     **/
-  val FULL_TABLENAME: String
+  val FULL_TABLE_NAME: String
 
   /**
     * HDFS路径
@@ -56,10 +56,10 @@ trait THiveRepository[E, R] extends Repositable with Serializable {
   /**
     * 从hdfs读取文本文件
     *
-    * @param sperator 文本分隔符
+    * @param separator 文本分隔符
     * @return 不同引擎的读取结果,如spark的rdd
     **/
-  def fromTextFile(sperator: String)(implicit env: E): R
+  def fromTextFile(separator: String)(implicit env: E): R
 
   /**
     * 将不同引擎的计算结果写为hive表,如spark的rdd

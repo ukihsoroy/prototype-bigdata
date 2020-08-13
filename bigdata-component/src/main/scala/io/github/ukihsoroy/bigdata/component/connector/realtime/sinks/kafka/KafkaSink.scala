@@ -14,7 +14,7 @@ class KafkaSink[K, V](createProducer: () => KafkaProducer[K, V]) extends Seriali
   def send(topic: String, value: V): Future[RecordMetadata] =
     producer.send(new ProducerRecord[K, V](topic, value))
 
-  def flush() = producer.flush()
+  def flush(): Unit = producer.flush()
 }
 
 object KafkaSink {

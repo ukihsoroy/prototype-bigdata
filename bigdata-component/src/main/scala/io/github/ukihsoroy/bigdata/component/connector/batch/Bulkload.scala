@@ -1,5 +1,7 @@
 package io.github.ukihsoroy.bigdata.component.connector.batch
 
+import java.nio.ByteBuffer
+
 import com.alibaba.fastjson.JSONObject
 import io.github.ukihsoroy.bigdata.component.util.{RddUtil, StringUtil}
 import org.apache.commons.lang.StringUtils
@@ -156,7 +158,9 @@ class Bulkload(@transient spark: SparkSession) {
     //    }
   }
 
-  def bulkloadHFiles(hbaseHost: String, hbaseTableName: String, hdfsPath: String) = {
+  import scala.collection.JavaConversions._
+
+  def bulkLoadHFiles(hbaseHost: String, hbaseTableName: String, hdfsPath: String) : Map[LoadIncrementalHFiles.LoadQueueItem, ByteBuffer] = {
     val conf = HBaseConfiguration.create()
     conf.addResource(new Path("/etc/hbase/conf/hbase-site.xml"))
     conf.set(HConstants.ZOOKEEPER_QUORUM, hbaseHost)
@@ -174,7 +178,12 @@ class Bulkload(@transient spark: SparkSession) {
     //Bulkload Hfiles to Hbase
     val bulkLoader = new LoadIncrementalHFiles(conf)
     val admin = connection.getAdmin
-    bulkLoader.doBulkLoad(new Path(hdfsPath), admin, table, connection.getRegionLocator(TableName.valueOf(hbaseTableName)))
+
+    mapAsScalaMap(bulkLoader.doBulkLoad(
+      new Path(hdfsPath),
+      admin,
+      table,
+      connection.getRegionLocator(TableName.valueOf(hbaseTableName)))).toMap
   }
 
   /**
@@ -185,7 +194,7 @@ class Bulkload(@transient spark: SparkSession) {
     * @param defRowkeyRule
     * @param distinctAttr
     */
-  def removeReduances(dataFrame: DataFrame, defRowkeyRule: Row => String, distinctAttr: String): DataFrame = {
+  def removeReduces(dataFrame: DataFrame, defRowkeyRule: Row => String, distinctAttr: String): DataFrame = {
     var rowkey: String = null
     var distinctVal: String = null
 
@@ -216,7 +225,7 @@ class Bulkload(@transient spark: SparkSession) {
     * @param defRowkeyRule
     * @param distinctAttr
     */
-  def removeReduances(dataFrame: DataFrame, defRowkeyRule: Row => String, distinctAttr: String, defParse: JSONObject => JSONObject): DataFrame = {
+  def removeReduces(dataFrame: DataFrame, defRowkeyRule: Row => String, distinctAttr: String, defParse: JSONObject => JSONObject): DataFrame = {
     val fieldNames = dataFrame.schema.fields.map(_.name)
     val resultRdd: RDD[JSONObject] = dataFrame.rdd.map {
       row =>
@@ -241,7 +250,7 @@ class Bulkload(@transient spark: SparkSession) {
           try {
             result.append(defParse(RddUtil.row2Object(fieldNames, data.next())))
           } catch {
-            case ex =>
+            case ex: Exception =>
               println("Bulkload | removeReduances | Exception: {}", ex)
           }
         }
@@ -253,5 +262,5 @@ class Bulkload(@transient spark: SparkSession) {
 }
 
 object Bulkload {
-  implicit def convert2BulkLoad(spark: SparkSession) = new Bulkload(spark)
+  implicit def convert2BulkLoad(spark: SparkSession): Bulkload = new Bulkload(spark)
 }

@@ -9,5 +9,10 @@ package io.github.ukihsoroy.bigdata.framework.bean
   * @param idCardField         数据表身份证字段名
   * @param cardNameField       数据表姓名字段名
   **/
-case class RegressBean(sampleTable: String, sampleIdCardField: String, sampleCardNameField: String, loanDayField: String
-                       , maxCount: Long, idCardField: String, cardNameField: String)
+case class RegressBean(sampleTable: String,
+                       sampleIdCardField: String,
+                       sampleCardNameField: String,
+                       loanDayField: String,
+                       maxCount: Long, 
+                       idCardField: String,
+                       cardNameField: String)

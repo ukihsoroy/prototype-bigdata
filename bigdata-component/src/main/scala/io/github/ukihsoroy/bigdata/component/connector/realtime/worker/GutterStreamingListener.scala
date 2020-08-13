@@ -12,7 +12,10 @@ import org.apache.spark.streaming.scheduler.{StreamingListener, StreamingListene
   * @param streamAppName 实时流app名字
   * @param producer kafka producer
   */
-class GutterStreamingListener(delayAlarmTime: Long, streamAppName: String, producer: Broadcast[KafkaSink[String, String]]) extends StreamingListener {
+class GutterStreamingListener(delayAlarmTime: Long,
+                              streamAppName: String,
+                              producer: Broadcast[KafkaSink[String, String]]) extends StreamingListener {
+
   // Batch启动
   override def onBatchStarted(batchStarted: StreamingListenerBatchStarted): Unit = {
     //单位毫秒
