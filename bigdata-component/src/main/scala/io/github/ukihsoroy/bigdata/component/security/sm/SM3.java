@@ -1,16 +1,14 @@
 package io.github.ukihsoroy.bigdata.component.security.sm;
 
 public class SM3 {
-    public static final byte[] iv = new byte[]{(byte)115, (byte)-128, (byte)22, (byte)111, (byte)73, (byte)20, (byte)-78, (byte)-71, (byte)23, (byte)36, (byte)66, (byte)-41, (byte)-38, (byte)-118, (byte)6, (byte)0, (byte)-87, (byte)111, (byte)48, (byte)-68, (byte)22, (byte)49, (byte)56, (byte)-86, (byte)-29, (byte)-115, (byte)-18, (byte)77, (byte)-80, (byte)-5, (byte)14, (byte)78};
+    public static final byte[] IV = new byte[]{(byte)115, (byte)-128, (byte)22, (byte)111, (byte)73, (byte)20, (byte)-78, (byte)-71, (byte)23, (byte)36, (byte)66, (byte)-41, (byte)-38, (byte)-118, (byte)6, (byte)0, (byte)-87, (byte)111, (byte)48, (byte)-68, (byte)22, (byte)49, (byte)56, (byte)-86, (byte)-29, (byte)-115, (byte)-18, (byte)77, (byte)-80, (byte)-5, (byte)14, (byte)78};
     public static int[] Tj = new int[64];
 
     public SM3() {
     }
 
-    public static byte[] CF(byte[] V, byte[] B) {
-        int[] v = convert(V);
-        int[] b = convert(B);
-        return convert(CF(v, b));
+    public static byte[] cf(byte[] v, byte[] b) {
+        return convert(cf(convert(v), convert(b)));
     }
 
     private static int[] convert(byte[] arr) {
@@ -37,16 +35,16 @@ public class SM3 {
         return out;
     }
 
-    public static int[] CF(int[] V, int[] B) {
-        int a = V[0];
-        int b = V[1];
-        int c = V[2];
-        int d = V[3];
-        int e = V[4];
-        int f = V[5];
-        int g = V[6];
-        int h = V[7];
-        int[][] arr = expand(B);
+    public static int[] cf(int[] argV, int[] argB) {
+        int a = argV[0];
+        int b = argV[1];
+        int c = argV[2];
+        int d = argV[3];
+        int e = argV[4];
+        int f = argV[5];
+        int g = argV[6];
+        int h = argV[7];
+        int[][] arr = expand(argB);
         int[] w = arr[0];
         int[] w1 = arr[1];
 
@@ -54,8 +52,8 @@ public class SM3 {
             int ss1 = bitCycleLeft(a, 12) + e + bitCycleLeft(Tj[out], out);
             ss1 = bitCycleLeft(ss1, 7);
             int ss2 = ss1 ^ bitCycleLeft(a, 12);
-            int tt1 = FFj(a, b, c, out) + d + ss2 + w1[out];
-            int tt2 = GGj(e, f, g, out) + h + ss1 + w[out];
+            int tt1 = ffj(a, b, c, out) + d + ss2 + w1[out];
+            int tt2 = ggj(e, f, g, out) + h + ss1 + w[out];
             d = c;
             c = bitCycleLeft(b, 9);
             b = a;
@@ -63,32 +61,30 @@ public class SM3 {
             h = g;
             g = bitCycleLeft(f, 19);
             f = e;
-            e = P0(tt2);
+            e = p0(tt2);
         }
 
-        int[] var18 = new int[]{a ^ V[0], b ^ V[1], c ^ V[2], d ^ V[3], e ^ V[4], f ^ V[5], g ^ V[6], h ^ V[7]};
-        return var18;
+        return new int[]{a ^ argV[0], b ^ argV[1], c ^ argV[2], d ^ argV[3], e ^ argV[4], f ^ argV[5], g ^ argV[6], h ^ argV[7]};
     }
 
-    private static int[][] expand(int[] B) {
-        int[] W = new int[68];
-        int[] W1 = new int[64];
+    private static int[][] expand(int[] argB) {
+        int[] w = new int[68];
+        int[] w1 = new int[64];
 
         int arr;
-        for(arr = 0; arr < B.length; ++arr) {
-            W[arr] = B[arr];
+        for(arr = 0; arr < argB.length; ++arr) {
+            w[arr] = argB[arr];
         }
 
         for(arr = 16; arr < 68; ++arr) {
-            W[arr] = P1(W[arr - 16] ^ W[arr - 9] ^ bitCycleLeft(W[arr - 3], 15)) ^ bitCycleLeft(W[arr - 13], 7) ^ W[arr - 6];
+            w[arr] = p1(w[arr - 16] ^ w[arr - 9] ^ bitCycleLeft(w[arr - 3], 15)) ^ bitCycleLeft(w[arr - 13], 7) ^ w[arr - 6];
         }
 
         for(arr = 0; arr < 64; ++arr) {
-            W1[arr] = W[arr] ^ W[arr + 4];
+            w1[arr] = w[arr] ^ w[arr + 4];
         }
 
-        int[][] var4 = new int[][]{W, W1};
-        return var4;
+        return new int[][]{w, w1};
     }
 
     private static byte[] bigEndianIntToByte(int num) {
@@ -99,45 +95,41 @@ public class SM3 {
         return SMUtil.byteToInt(back(bytes));
     }
 
-    private static int FFj(int X, int Y, int Z, int j) {
-        return j >= 0 && j <= 15?FF1j(X, Y, Z):FF2j(X, Y, Z);
+    private static int ffj(int argX, int argY, int argZ, int j) {
+        return j >= 0 && j <= 15?ff1j(argX, argY, argZ):ff2j(argX, argY, argZ);
     }
 
-    private static int GGj(int X, int Y, int Z, int j) {
-        return j >= 0 && j <= 15?GG1j(X, Y, Z):GG2j(X, Y, Z);
+    private static int ggj(int argX, int argY, int argZ, int j) {
+        return j >= 0 && j <= 15?gg1j(argX, argY, argZ):gg2j(argX, argY, argZ);
     }
 
-    private static int FF1j(int X, int Y, int Z) {
-        int tmp = X ^ Y ^ Z;
-        return tmp;
+    private static int ff1j(int argX, int argY, int argZ) {
+        return argX ^ argY ^ argZ;
     }
 
-    private static int FF2j(int X, int Y, int Z) {
-        int tmp = X & Y | X & Z | Y & Z;
-        return tmp;
+    private static int ff2j(int argX, int argY, int argZ) {
+        return argX & argY | argX & argZ | argY & argZ;
     }
 
-    private static int GG1j(int X, int Y, int Z) {
-        int tmp = X ^ Y ^ Z;
-        return tmp;
+    private static int gg1j(int argX, int argY, int argZ) {
+        return argX ^ argY ^ argZ;
     }
 
-    private static int GG2j(int X, int Y, int Z) {
-        int tmp = X & Y | ~X & Z;
-        return tmp;
+    private static int gg2j(int argX, int argY, int argZ) {
+        return argX & argY | ~argX & argZ;
     }
 
-    private static int P0(int X) {
-        int y = rotateLeft(X, 9);
-        y = bitCycleLeft(X, 9);
-        int z = rotateLeft(X, 17);
-        z = bitCycleLeft(X, 17);
-        int t = X ^ y ^ z;
+    private static int p0(int argX) {
+        int y = rotateLeft(argX, 9);
+        y = bitCycleLeft(argX, 9);
+        int z = rotateLeft(argX, 17);
+        z = bitCycleLeft(argX, 17);
+        int t = argX ^ y ^ z;
         return t;
     }
 
-    private static int P1(int X) {
-        int t = X ^ bitCycleLeft(X, 15) ^ bitCycleLeft(X, 23);
+    private static int p1(int argX) {
+        int t = argX ^ bitCycleLeft(argX, 15) ^ bitCycleLeft(argX, 23);
         return t;
     }
 

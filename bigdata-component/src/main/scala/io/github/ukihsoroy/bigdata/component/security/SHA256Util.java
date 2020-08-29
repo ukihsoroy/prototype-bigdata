@@ -8,7 +8,7 @@ public class SHA256Util {
     public SHA256Util() {
     }
 
-    public static String getSHA256StrJava(String str) {
+    public static String getSha256(String str) {
         String encodeStr = "";
 
         try {
@@ -41,6 +41,6 @@ public class SHA256Util {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(getSHA256StrJava("arferf"));
+        System.out.println(getSha256("arferf"));
     }
 }

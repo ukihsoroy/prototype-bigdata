@@ -13,7 +13,7 @@ public class CryptTool {
     public CryptTool() {
     }
 
-    private final static String[] hexDigits = { "0", "1", "2", "3", "4", "5",
+    private final static String[] HEX_DIGITS = { "0", "1", "2", "3", "4", "5",
             "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 
     /**
@@ -39,38 +39,37 @@ public class CryptTool {
         }
         int d1 = n / 16;
         int d2 = n % 16;
-        return hexDigits[d1] + hexDigits[d2];
+        return HEX_DIGITS[d1] + HEX_DIGITS[d2];
     }
 
     /**
      * 生成3DES密钥.
      *
-     * @param key_byte
+     * @param keyByte
      *            seed key
      * @throws Exception
      * @return javax.crypto.SecretKey Generated DES key
      */
-    public static SecretKey genDESKey(byte[] key_byte)
+    public static SecretKey genDesKey(byte[] keyByte)
             throws Exception {
 
         SecretKey k = null;
-        k = new SecretKeySpec(key_byte, "DESede");
+        k = new SecretKeySpec(keyByte, "DESede");
         return k;
     }
 
-    public static SecretKey genDESKey() throws Exception {
+    public static SecretKey genDesKey() throws Exception {
         String keyStr = "$1#2@f3&4~6%7!a+*cd(e-h)";// 使用固定key
-        byte key_byte[] = keyStr.getBytes();// 3DES 24 bytes key
+        byte[] keyByte = keyStr.getBytes();// 3DES 24 bytes key
         SecretKey k;
-        k = new SecretKeySpec(key_byte, "DESede");
+        k = new SecretKeySpec(keyByte, "DESede");
         return k;
     }
 
-    public static SecretKey genDESKey(String key) throws Exception {
-        String keyStr = key;// 使用固定key
-        byte key_byte[] = keyStr.getBytes();// 3DES 24 bytes key
+    public static SecretKey genDesKey(String key) throws Exception {
+        byte[] keyByte = key.getBytes();// 3DES 24 bytes key
         SecretKey k;
-        k = new SecretKeySpec(key_byte, "DESede");
+        k = new SecretKeySpec(keyByte, "DESede");
         return k;
     }
 
@@ -150,11 +149,11 @@ public class CryptTool {
 
     public static String desEncrypt(byte[] src) throws Exception {
 
-        return byteArrayToHexString(desEncrypt(CryptTool.genDESKey(), src));
+        return byteArrayToHexString(desEncrypt(CryptTool.genDesKey(), src));
     }
 
     public static byte[] desDecrypt(String str) throws Exception{
-        return desDecrypt(genDESKey(), hexString2ByteArray(str));
+        return desDecrypt(genDesKey(), hexString2ByteArray(str));
     }
 
     /**
@@ -314,8 +313,9 @@ public class CryptTool {
      * @param str 需要加密的字符串
      */
     public static String des3Base64Enc(SecretKey key,String str)throws Exception{
-        if(key==null)
-            key = genDESKey();
+        if(key==null) {
+            key = genDesKey();
+        }
         byte[] enc = desEncrypt(key,str.getBytes());
         return base64Encode(enc);
     }
@@ -326,8 +326,9 @@ public class CryptTool {
      * @param str 需要加密的字符串
      */
     public static String des3Base64Dec(SecretKey key,String str)throws Exception{
-        if(key==null)
-            key = genDESKey();
+        if(key==null) {
+            key = genDesKey();
+        }
         byte[] decbase64 = base64DecodeToBytes(str);
         byte[] dec = desDecrypt(key, decbase64);
         return new String(dec,"UTF-8");

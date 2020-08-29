@@ -6,20 +6,20 @@ public class SM3Digest {
     private static final int BUFFER_LENGTH = 64;
     private byte[] xBuf = new byte[64];
     private int xBufOff;
-    private byte[] V;
+    private byte[] v;
     private int cntBlock;
 
     public SM3Digest() {
-        this.V = (byte[])SM3.iv.clone();
+        this.v = (byte[])SM3.IV.clone();
         this.cntBlock = 0;
     }
 
     public SM3Digest(SM3Digest t) {
-        this.V = (byte[])SM3.iv.clone();
+        this.v = (byte[])SM3.IV.clone();
         this.cntBlock = 0;
         System.arraycopy(t.xBuf, 0, this.xBuf, 0, t.xBuf.length);
         this.xBufOff = t.xBufOff;
-        System.arraycopy(t.V, 0, this.V, 0, t.V.length);
+        System.arraycopy(t.v, 0, this.v, 0, t.v.length);
     }
 
     public int doFinal(byte[] out, int outOff) {
@@ -31,7 +31,7 @@ public class SM3Digest {
     public void reset() {
         this.xBufOff = 0;
         this.cntBlock = 0;
-        this.V = (byte[])SM3.iv.clone();
+        this.v = (byte[])SM3.IV.clone();
     }
 
     public void update(byte[] in, int inOff, int len) {
@@ -57,34 +57,34 @@ public class SM3Digest {
     }
 
     private void doUpdate() {
-        byte[] B = new byte[64];
+        byte[] b = new byte[64];
 
         for(int i = 0; i < 64; i += 64) {
-            System.arraycopy(this.xBuf, i, B, 0, B.length);
-            this.doHash(B);
+            System.arraycopy(this.xBuf, i, b, 0, b.length);
+            this.doHash(b);
         }
 
         this.xBufOff = 0;
     }
 
-    private void doHash(byte[] B) {
-        byte[] tmp = SM3.CF(this.V, B);
-        System.arraycopy(tmp, 0, this.V, 0, this.V.length);
+    private void doHash(byte[] b) {
+        byte[] tmp = SM3.cf(this.v, b);
+        System.arraycopy(tmp, 0, this.v, 0, this.v.length);
         ++this.cntBlock;
     }
 
     private byte[] doFinal() {
-        byte[] B = new byte[64];
+        byte[] b = new byte[64];
         byte[] buffer = new byte[this.xBufOff];
         System.arraycopy(this.xBuf, 0, buffer, 0, buffer.length);
         byte[] tmp = SM3.padding(buffer, this.cntBlock);
 
         for(int i = 0; i < tmp.length; i += 64) {
-            System.arraycopy(tmp, i, B, 0, B.length);
-            this.doHash(B);
+            System.arraycopy(tmp, i, b, 0, b.length);
+            this.doHash(b);
         }
 
-        return this.V;
+        return this.v;
     }
 
     public void update(byte in) {

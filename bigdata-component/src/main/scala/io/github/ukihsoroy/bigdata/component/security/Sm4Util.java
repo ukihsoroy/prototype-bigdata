@@ -13,7 +13,7 @@ public class Sm4Util {
     public Sm4Util() {
     }
 
-    public static String encryptData_ECB(String secretKey, String plainText) {
+    public static String encryptDataEcb(String secretKey, String plainText) {
         try {
             SM4_Context e = new SM4_Context();
             e.isPadding = true;
@@ -26,8 +26,8 @@ public class Sm4Util {
             }
 
             SM4 sm4 = new SM4();
-            sm4.sm4_setkey_enc(e, keyBytes);
-            byte[] encrypted = sm4.sm4_crypt_ecb(e, plainText.getBytes("UTF-8"));
+            sm4.sm4SetKeyEnc(e, keyBytes);
+            byte[] encrypted = sm4.sm4CryptEcb(e, plainText.getBytes("UTF-8"));
             String cipherText = Base64Helper.encodeToString(encrypted);
             if(cipherText != null && cipherText.trim().length() > 0) {
                 ;
@@ -40,7 +40,7 @@ public class Sm4Util {
         }
     }
 
-    public static String decryptData_ECB(String secretKey, String cipherText) {
+    public static String decryptDataEcb(String secretKey, String cipherText) {
         try {
             SM4_Context e = new SM4_Context();
             e.isPadding = true;
@@ -53,8 +53,8 @@ public class Sm4Util {
             }
 
             SM4 sm4 = new SM4();
-            sm4.sm4_setkey_dec(e, keyBytes);
-            byte[] decrypted = sm4.sm4_crypt_ecb(e, Base64Helper.decodeFromString(cipherText));
+            sm4.sm4SetKeyDec(e, keyBytes);
+            byte[] decrypted = sm4.sm4CryptEcb(e, Base64Helper.decodeFromString(cipherText));
             return new String(decrypted, "UTF-8");
         } catch (Exception var6) {
             var6.printStackTrace();
@@ -62,7 +62,7 @@ public class Sm4Util {
         }
     }
 
-    public static String encryptData_CBC(String iv, String secretKey, String plainText) {
+    public static String encryptDataCbc(String iv, String secretKey, String plainText) {
         try {
             SM4_Context e = new SM4_Context();
             e.isPadding = true;
@@ -78,8 +78,8 @@ public class Sm4Util {
             }
 
             SM4 sm4 = new SM4();
-            sm4.sm4_setkey_enc(e, keyBytes);
-            byte[] encrypted = sm4.sm4_crypt_cbc(e, ivBytes, plainText.getBytes("UTF-8"));
+            sm4.sm4SetKeyEnc(e, keyBytes);
+            byte[] encrypted = sm4.sm4CryptCbc(e, ivBytes, plainText.getBytes("UTF-8"));
             String cipherText = Base64Helper.encodeToString(encrypted);
             if(cipherText != null && cipherText.trim().length() > 0) {
                 ;
@@ -92,7 +92,7 @@ public class Sm4Util {
         }
     }
 
-    public static String decryptData_CBC(String iv, String secretKey, String cipherText) {
+    public static String decryptDataCbc(String iv, String secretKey, String cipherText) {
         try {
             SM4_Context e = new SM4_Context();
             e.isPadding = true;
@@ -108,8 +108,8 @@ public class Sm4Util {
             }
 
             SM4 sm4 = new SM4();
-            sm4.sm4_setkey_dec(e, keyBytes);
-            byte[] decrypted = sm4.sm4_crypt_cbc(e, ivBytes, Base64Helper.decodeFromString(cipherText));
+            sm4.sm4SetKeyDec(e, keyBytes);
+            byte[] decrypted = sm4.sm4CryptCbc(e, ivBytes, Base64Helper.decodeFromString(cipherText));
             return new String(decrypted, "UTF-8");
         } catch (Exception var8) {
             var8.printStackTrace();
@@ -121,18 +121,18 @@ public class Sm4Util {
         String plainText = "ererfeiisgod";
         String secretKey = "JeF8U9wHFOMfs2Y8";
         System.out.println("ECB模式");
-        String cipherText = encryptData_ECB(secretKey, plainText);
+        String cipherText = encryptDataEcb(secretKey, plainText);
         System.out.println("密文: " + cipherText);
         System.out.println("");
-        plainText = decryptData_ECB(secretKey, cipherText);
+        plainText = decryptDataEcb(secretKey, cipherText);
         System.out.println("明文: " + plainText);
         System.out.println("");
         System.out.println("CBC模式");
         String iv = "UISwD9fW6cFh9SNS";
-        cipherText = encryptData_CBC(iv, secretKey, plainText);
+        cipherText = encryptDataCbc(iv, secretKey, plainText);
         System.out.println("密文: " + cipherText);
         System.out.println("");
-        plainText = decryptData_CBC(iv, secretKey, cipherText);
+        plainText = decryptDataCbc(iv, secretKey, cipherText);
         System.out.println("明文: " + plainText);
     }
 }

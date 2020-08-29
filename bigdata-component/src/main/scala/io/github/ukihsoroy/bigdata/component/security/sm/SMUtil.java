@@ -5,7 +5,7 @@ public class SMUtil {
     }
 
     public static byte[] hexStringToBytes(String hexString) {
-        if(hexString != null && !hexString.equals("")) {
+        if(hexString != null && !"".equals(hexString)) {
             hexString = hexString.toUpperCase();
             int length = hexString.length() / 2;
             char[] hexChars = hexString.toCharArray();

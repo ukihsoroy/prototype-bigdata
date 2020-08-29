@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class Hex {
-    private static final Encoder encoder = new HexEncoder();
+    private static final Encoder ENCODER = new HexEncoder();
 
     public Hex() {
     }
@@ -27,7 +27,7 @@ public class Hex {
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
 
         try {
-            encoder.encode(data, off, length, bOut);
+            ENCODER.encode(data, off, length, bOut);
         } catch (Exception var5) {
             throw new EncoderException("exception encoding Hex string: " + var5.getMessage(), var5);
         }
@@ -36,18 +36,18 @@ public class Hex {
     }
 
     public static int encode(byte[] data, OutputStream out) throws IOException {
-        return encoder.encode(data, 0, data.length, out);
+        return ENCODER.encode(data, 0, data.length, out);
     }
 
     public static int encode(byte[] data, int off, int length, OutputStream out) throws IOException {
-        return encoder.encode(data, off, length, out);
+        return ENCODER.encode(data, off, length, out);
     }
 
     public static byte[] decode(byte[] data) {
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
 
         try {
-            encoder.decode(data, 0, data.length, bOut);
+            ENCODER.decode(data, 0, data.length, bOut);
         } catch (Exception var3) {
             throw new DecoderException("exception decoding Hex data: " + var3.getMessage(), var3);
         }
@@ -59,7 +59,7 @@ public class Hex {
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
 
         try {
-            encoder.decode(data, bOut);
+            ENCODER.decode(data, bOut);
         } catch (Exception var3) {
             throw new DecoderException("exception decoding Hex string: " + var3.getMessage(), var3);
         }
@@ -68,6 +68,6 @@ public class Hex {
     }
 
     public static int decode(String data, OutputStream out) throws IOException {
-        return encoder.decode(data, out);
+        return ENCODER.decode(data, out);
     }
 }
