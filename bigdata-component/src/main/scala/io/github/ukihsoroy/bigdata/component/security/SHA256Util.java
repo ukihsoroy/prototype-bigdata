@@ -1,11 +1,11 @@
 package io.github.ukihsoroy.bigdata.component.security;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SHA256Util {
-    public SHA256Util() {
+    private SHA256Util() {
     }
 
     public static String getSha256(String str) {
@@ -13,12 +13,10 @@ public class SHA256Util {
 
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(str.getBytes("UTF-8"));
+            messageDigest.update(str.getBytes(StandardCharsets.UTF_8));
             encodeStr = byte2Hex(messageDigest.digest());
         } catch (NoSuchAlgorithmException var4) {
             var4.printStackTrace();
-        } catch (UnsupportedEncodingException var5) {
-            var5.printStackTrace();
         }
 
         return encodeStr;

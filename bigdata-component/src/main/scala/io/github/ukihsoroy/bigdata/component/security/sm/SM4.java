@@ -119,7 +119,7 @@ public class SM4 {
         if(input == null) {
             return null;
         } else {
-            byte[] ret = (byte[])null;
+            byte[] ret = null;
             if(mode == 1) {
                 int p = 16 - input.length % 16;
                 ret = new byte[input.length + p];
@@ -138,7 +138,7 @@ public class SM4 {
         }
     }
 
-    public void sm4SetKeyEnc(SM4_Context ctx, byte[] key) throws Exception {
+    public void sm4SetKeyEnc(SM4Context ctx, byte[] key) throws Exception {
         if(ctx == null) {
             throw new Exception("ctx is null!");
         } else if(key != null && key.length == 16) {
@@ -149,7 +149,7 @@ public class SM4 {
         }
     }
 
-    public void sm4SetKeyDec(SM4_Context ctx, byte[] key) throws Exception {
+    public void sm4SetKeyDec(SM4Context ctx, byte[] key) throws Exception {
         if(ctx == null) {
             throw new Exception("ctx is null!");
         } else if(key != null && key.length == 16) {
@@ -166,7 +166,7 @@ public class SM4 {
         }
     }
 
-    public byte[] sm4CryptEcb(SM4_Context ctx, byte[] input) throws Exception {
+    public byte[] sm4CryptEcb(SM4Context ctx, byte[] input) throws Exception {
         if(input == null) {
             throw new Exception("input is null!");
         } else {
@@ -198,7 +198,7 @@ public class SM4 {
         }
     }
 
-    public byte[] sm4CryptCbc(SM4_Context ctx, byte[] iv, byte[] input) throws Exception {
+    public byte[] sm4CryptCbc(SM4Context ctx, byte[] iv, byte[] input) throws Exception {
         if(iv != null && iv.length == 16) {
             if(input == null) {
                 throw new Exception("input is null!");

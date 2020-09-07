@@ -4,7 +4,7 @@ import io.github.ukihsoroy.bigdata.component.security.sm.Hex;
 import io.github.ukihsoroy.bigdata.component.security.sm.SM3Digest;
 
 public class Sm3Util {
-    public Sm3Util() {
+    private Sm3Util() {
     }
 
     public static String encrypt(String str) throws Exception {
@@ -26,7 +26,6 @@ public class Sm3Util {
             System.out.println(encrypt("sdfsfds"));
             System.out.println(encrypt("sdfsfds"));
         } catch (Exception var2) {
-            ;
         }
 
     }

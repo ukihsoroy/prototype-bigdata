@@ -138,4 +138,6 @@ public class Base64Helper {
 		return new String(decodedValue, charset);
 	}
 
+	private Base64Helper() {}
+
 }

@@ -11,10 +11,10 @@ import java.util.zip.ZipOutputStream;
 public class ZipCompress {
 
     // 目的地Zip文件
-    private String zipFileName;
+    private final String zipFileName;
 
     //源文件（带压缩的文件或文件夹）
-    private String sourceFileName;
+    private final String sourceFileName;
 
 
     public ZipCompress(String zipFileName, String sourceFileName) {

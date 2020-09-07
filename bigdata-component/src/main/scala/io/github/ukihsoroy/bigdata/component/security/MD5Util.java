@@ -1,12 +1,13 @@
 package io.github.ukihsoroy.bigdata.component.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 public class MD5Util {
     private static final String ALGORITHM_MD5 = "MD5";
     private static final String UTF_8 = "UTF-8";
 
-    public MD5Util() {
+    private MD5Util() {
     }
 
     public static String encrypt32(String encryptStr) {
@@ -35,7 +36,7 @@ public class MD5Util {
     public static String encrypt64(String encryptStr) {
         try {
             MessageDigest e = MessageDigest.getInstance("MD5");
-            encryptStr = Base64Helper.encodeToString(e.digest(encryptStr.getBytes("UTF-8")));
+            encryptStr = Base64Helper.encodeToString(e.digest(encryptStr.getBytes(StandardCharsets.UTF_8)));
             return encryptStr;
         } catch (Exception var3) {
             throw new SecurityException("MD5加密失败", var3);

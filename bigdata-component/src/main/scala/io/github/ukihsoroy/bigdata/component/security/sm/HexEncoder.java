@@ -50,7 +50,6 @@ public class HexEncoder implements Encoder {
 
         int end;
         for(end = off + length; end > off && ignore((char)data[end - 1]); --end) {
-            ;
         }
 
         for(int i = off; i < end; ++outLen) {
@@ -60,7 +59,6 @@ public class HexEncoder implements Encoder {
 
             byte b1;
             for(b1 = this.decodingTable[data[i++]]; i < end && ignore((char)data[i]); ++i) {
-                ;
             }
 
             byte b2 = this.decodingTable[data[i++]];
@@ -80,7 +78,6 @@ public class HexEncoder implements Encoder {
 
         int end;
         for(end = data.length(); end > 0 && ignore(data.charAt(end - 1)); --end) {
-            ;
         }
 
         for(int i = 0; i < end; ++length) {
@@ -90,7 +87,6 @@ public class HexEncoder implements Encoder {
 
             byte b1;
             for(b1 = this.decodingTable[data.charAt(i++)]; i < end && ignore(data.charAt(i)); ++i) {
-                ;
             }
 
             byte b2 = this.decodingTable[data.charAt(i++)];

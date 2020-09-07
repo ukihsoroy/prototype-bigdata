@@ -134,19 +134,17 @@ public final class ByteUtils {
         String result = "";
 
         for (int i = 0; i < input.length; ++i) {
-            result = result + HEX_CHARS[input[i] >>> 4 & 15];
-            result = result + HEX_CHARS[input[i] & 15];
+            result = result + HEX_CHARS[input[i] >>> 4 & 15] + HEX_CHARS[input[i] & 15];
         }
 
         return result;
     }
 
     public static String toHexString(byte[] input, String prefix, String seperator) {
-        String result = new String(prefix);
+        String result = prefix;
 
         for (int i = 0; i < input.length; ++i) {
-            result = result + HEX_CHARS[input[i] >>> 4 & 15];
-            result = result + HEX_CHARS[input[i] & 15];
+            result = result + HEX_CHARS[input[i] >>> 4 & 15] + HEX_CHARS[input[i] & 15];
             if (i < input.length - 1) {
                 result = result + seperator;
             }
@@ -162,8 +160,7 @@ public final class ByteUtils {
             byte e = input[i];
 
             for (int ii = 0; ii < 8; ++ii) {
-                int b = e >>> ii & 1;
-                result = result + b;
+                result = result + (e >>> ii & 1);
             }
 
             if (i != input.length - 1) {

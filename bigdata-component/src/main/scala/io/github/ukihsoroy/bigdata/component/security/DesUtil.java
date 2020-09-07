@@ -10,12 +10,12 @@ public class DesUtil {
     private static final String DES = "DES";
     private static final String ENCODE = "GBK";
 
-    public DesUtil() {
+    private DesUtil() {
     }
 
     public static String encrypt(String data, String key) {
         try {
-            key = String.format("%8s", new Object[]{key}).replaceAll(" ", "0");
+            key = String.format("%8s", key).replaceAll(" ", "0");
             byte[] e = encrypt(data.getBytes("GBK"), key.getBytes("GBK"));
             String strs = Base64Helper.encodeToString(e);
             return strs;
@@ -26,7 +26,7 @@ public class DesUtil {
 
     public static String decrypt(String data, String key) {
         try {
-            key = String.format("%8s", new Object[]{key}).replaceAll(" ", "0");
+            key = String.format("%8s", key).replaceAll(" ", "0");
             if(data == null) {
                 return null;
             } else {

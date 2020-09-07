@@ -11,7 +11,7 @@ import java.util.Vector;
 public final class Strings {
     private static String LINE_SEPARATOR;
 
-    public Strings() {
+    private Strings() {
     }
 
     public static String fromUTF8ByteArray(byte[] bytes) {
@@ -242,7 +242,7 @@ public final class Strings {
             });
         } catch (Exception var3) {
             try {
-                LINE_SEPARATOR = String.format("%n", new Object[0]);
+                LINE_SEPARATOR = String.format("%n");
             } catch (Exception var2) {
                 LINE_SEPARATOR = "\n";
             }
@@ -261,7 +261,7 @@ public final class Strings {
 
         @Override
         public String set(int index, String element) {
-            return (String) super.set(index, element);
+            return super.set(index, element);
         }
 
         @Override
@@ -274,7 +274,7 @@ public final class Strings {
             String[] strs = new String[this.size()];
 
             for (int i = 0; i != strs.length; ++i) {
-                strs[i] = (String) this.get(i);
+                strs[i] = this.get(i);
             }
 
             return strs;
@@ -285,7 +285,7 @@ public final class Strings {
             String[] strs = new String[to - from];
 
             for (int i = from; i != this.size() && i != to; ++i) {
-                strs[i - from] = (String) this.get(i);
+                strs[i - from] = this.get(i);
             }
 
             return strs;

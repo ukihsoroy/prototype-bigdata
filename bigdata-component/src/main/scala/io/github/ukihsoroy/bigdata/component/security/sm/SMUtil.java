@@ -1,7 +1,7 @@
 package io.github.ukihsoroy.bigdata.component.security.sm;
 
 public class SMUtil {
-    public SMUtil() {
+    private SMUtil() {
     }
 
     public static byte[] hexStringToBytes(String hexString) {

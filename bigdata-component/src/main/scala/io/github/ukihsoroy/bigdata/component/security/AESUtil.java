@@ -6,13 +6,14 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class AESUtil {
     private static final String KEY_ALGORITHM = "AES";
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final String IV_STRING = "XINYAN-AES000000";
 
-    public AESUtil() {
+    private AESUtil() {
     }
 
     public static String encrypt(String source, String key) {
@@ -24,7 +25,7 @@ public class AESUtil {
                 IvParameterSpec ivParameterSpec = new IvParameterSpec(initParam);
                 Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
                 cipher.init(1, skeySpec, ivParameterSpec);
-                byte[] encrypted = cipher.doFinal(source.getBytes(Charset.forName("UTF-8")));
+                byte[] encrypted = cipher.doFinal(source.getBytes(StandardCharsets.UTF_8));
                 return Base64Helper.encodeToString(encrypted);
             } else {
                 return null;
@@ -45,7 +46,7 @@ public class AESUtil {
                 cipher.init(2, skeySpec, ivParameterSpec);
                 byte[] sourceBytes = Base64Helper.decodeFromString(source);
                 byte[] original = cipher.doFinal(sourceBytes);
-                return new String(original, Charset.forName("UTF-8"));
+                return new String(original, StandardCharsets.UTF_8);
             } else {
                 return null;
             }

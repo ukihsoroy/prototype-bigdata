@@ -4,7 +4,7 @@ public class SM3 {
     public static final byte[] IV = new byte[]{(byte)115, (byte)-128, (byte)22, (byte)111, (byte)73, (byte)20, (byte)-78, (byte)-71, (byte)23, (byte)36, (byte)66, (byte)-41, (byte)-38, (byte)-118, (byte)6, (byte)0, (byte)-87, (byte)111, (byte)48, (byte)-68, (byte)22, (byte)49, (byte)56, (byte)-86, (byte)-29, (byte)-115, (byte)-18, (byte)77, (byte)-80, (byte)-5, (byte)14, (byte)78};
     public static int[] Tj = new int[64];
 
-    public SM3() {
+    private SM3() {
     }
 
     public static byte[] cf(byte[] v, byte[] b) {
@@ -142,7 +142,7 @@ public class SM3 {
         ++k;
         byte[] padd = new byte[k / 8];
         padd[0] = -128;
-        long n = (long)(in.length * 8 + bLen * 512);
+        long n = in.length * 8 + bLen * 512;
         byte[] out = new byte[in.length + k / 8 + 8];
         byte pos = 0;
         System.arraycopy(in, 0, out, 0, in.length);
@@ -191,7 +191,7 @@ public class SM3 {
             byte t1 = (byte)((in[i] & 255) << len);
             byte t2 = (byte)((in[(i + 1) % tmp.length] & 255) >> 8 - len);
             byte t3 = (byte)(t1 | t2);
-            tmp[i] = (byte)t3;
+            tmp[i] = t3;
         }
 
         return tmp;

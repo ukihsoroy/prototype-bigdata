@@ -7,7 +7,7 @@ import java.io.OutputStream;
 public class Hex {
     private static final Encoder ENCODER = new HexEncoder();
 
-    public Hex() {
+    private Hex() {
     }
 
     public static String toHexString(byte[] data) {

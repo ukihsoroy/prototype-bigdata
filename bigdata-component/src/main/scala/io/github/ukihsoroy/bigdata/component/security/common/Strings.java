@@ -48,7 +48,6 @@ public final class Strings {
 
         int p;
         for (p = 0; p < maxPrefixLength && a.charAt(p) == b.charAt(p); ++p) {
-            ;
         }
 
         if (validSurrogatePairAt(a, p - 1) || validSurrogatePairAt(b, p - 1)) {
@@ -65,7 +64,6 @@ public final class Strings {
 
         int s;
         for (s = 0; s < maxSuffixLength && a.charAt(a.length() - s - 1) == b.charAt(b.length() - s - 1); ++s) {
-            ;
         }
 
         if (validSurrogatePairAt(a, a.length() - s - 1) || validSurrogatePairAt(b, b.length() - s - 1)) {

@@ -4,18 +4,18 @@ public class SM3Digest {
     private static final int BYTE_LENGTH = 32;
     private static final int BLOCK_LENGTH = 64;
     private static final int BUFFER_LENGTH = 64;
-    private byte[] xBuf = new byte[64];
+    private final byte[] xBuf = new byte[64];
     private int xBufOff;
     private byte[] v;
     private int cntBlock;
 
     public SM3Digest() {
-        this.v = (byte[])SM3.IV.clone();
+        this.v = SM3.IV.clone();
         this.cntBlock = 0;
     }
 
     public SM3Digest(SM3Digest t) {
-        this.v = (byte[])SM3.IV.clone();
+        this.v = SM3.IV.clone();
         this.cntBlock = 0;
         System.arraycopy(t.xBuf, 0, this.xBuf, 0, t.xBuf.length);
         this.xBufOff = t.xBufOff;
@@ -31,7 +31,7 @@ public class SM3Digest {
     public void reset() {
         this.xBufOff = 0;
         this.cntBlock = 0;
-        this.v = (byte[])SM3.IV.clone();
+        this.v = SM3.IV.clone();
     }
 
     public void update(byte[] in, int inOff, int len) {

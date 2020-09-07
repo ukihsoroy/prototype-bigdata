@@ -1,7 +1,7 @@
 package io.github.ukihsoroy.bigdata.component.security.sm;
 
 public class EncoderException extends IllegalStateException {
-    private Throwable cause;
+    private final Throwable cause;
 
     EncoderException(String msg, Throwable cause) {
         super(msg);

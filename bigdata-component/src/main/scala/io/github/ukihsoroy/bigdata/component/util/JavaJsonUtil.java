@@ -9,4 +9,6 @@ public class JavaJsonUtil {
     public static String toJsonString(Object obj) {
         return JSON.toJSONString(obj);
     }
+
+    private JavaJsonUtil() {}
 }

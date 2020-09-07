@@ -17,7 +17,7 @@ import java.util.Map;
  * 非对称算法一般是用来传送对称加密算法的密钥来使用的，相对于DH算法，RSA算法只需要一方构造密钥，不需要
  * 大费周章的构造各自本地的密钥对了。DH算法只能算法非对称算法的底层实现。而RSA算法算法实现起来较为简单
  */
-public class RSACoder {
+public final class RSACoder {
 
     //非对称密钥算法
     public static final String KEY_ALGORITHM = "RSA";
@@ -209,4 +209,6 @@ public class RSACoder {
 
         System.out.println("甲方解密后的数据：" + new String(decode2));
     }
+
+    private RSACoder() {}
 }

@@ -4,13 +4,14 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Description 封装了一些加密工具方法, 包括 3DES, MD5 等.
  */
 public class CryptTool {
 
-    public CryptTool() {
+    private CryptTool() {
     }
 
     private final static String[] HEX_DIGITS = { "0", "1", "2", "3", "4", "5",
@@ -127,7 +128,7 @@ public class CryptTool {
      */
     public static String desDecrypt(SecretKey key, String crypt)
             throws Exception {
-        return byteArrayToHexString(desDecrypt(key, crypt.getBytes("UTF-8")));
+        return byteArrayToHexString(desDecrypt(key, crypt.getBytes(StandardCharsets.UTF_8)));
     }
 
     /**
@@ -168,7 +169,7 @@ public class CryptTool {
      */
     public static String desEncrypt(SecretKey key, String src)
             throws Exception {
-        return byteArrayToHexString(desEncrypt(key, src.getBytes("UTF-8")));
+        return byteArrayToHexString(desEncrypt(key, src.getBytes(StandardCharsets.UTF_8)));
     }
 
     /**
@@ -331,7 +332,7 @@ public class CryptTool {
         }
         byte[] decbase64 = base64DecodeToBytes(str);
         byte[] dec = desDecrypt(key, decbase64);
-        return new String(dec,"UTF-8");
+        return new String(dec, StandardCharsets.UTF_8);
     }
 }
 
