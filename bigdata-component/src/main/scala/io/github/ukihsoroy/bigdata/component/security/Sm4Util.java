@@ -7,9 +7,12 @@ import io.github.ukihsoroy.bigdata.component.security.sm.SMUtil;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-
+/**
+ * @author K.O
+ */
 public class Sm4Util {
-    private static final boolean hexString = false;
+
+    private static final boolean HEX_STRING = false;
 
     private Sm4Util() {
     }
@@ -20,7 +23,7 @@ public class Sm4Util {
             e.isPadding = true;
             e.mode = 1;
             byte[] keyBytes;
-            if(hexString) {
+            if(HEX_STRING) {
                 keyBytes = SMUtil.hexStringToBytes(secretKey);
             } else {
                 keyBytes = secretKey.getBytes();
@@ -46,7 +49,7 @@ public class Sm4Util {
             e.isPadding = true;
             e.mode = 0;
             byte[] keyBytes;
-            if(hexString) {
+            if(HEX_STRING) {
                 keyBytes = SMUtil.hexStringToBytes(secretKey);
             } else {
                 keyBytes = secretKey.getBytes();
@@ -69,7 +72,7 @@ public class Sm4Util {
             e.mode = 1;
             byte[] keyBytes;
             byte[] ivBytes;
-            if(hexString) {
+            if(HEX_STRING) {
                 keyBytes = SMUtil.hexStringToBytes(secretKey);
                 ivBytes = SMUtil.hexStringToBytes(iv);
             } else {
@@ -98,7 +101,7 @@ public class Sm4Util {
             e.mode = 0;
             byte[] keyBytes;
             byte[] ivBytes;
-            if(hexString) {
+            if(HEX_STRING) {
                 keyBytes = SMUtil.hexStringToBytes(secretKey);
                 ivBytes = SMUtil.hexStringToBytes(iv);
             } else {
