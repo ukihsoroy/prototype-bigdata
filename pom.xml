@@ -20,7 +20,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <scalaj.version>2.3.0</scalaj.version>
-        <logback.version>1.1.7</logback.version>
+        <logback.version>1.2.0</logback.version>
         <scala.binary.version>2.11</scala.binary.version>
         <maven.plugin.version>3.8.0</maven.plugin.version>
         <curator.framework.version>4.0.1</curator.framework.version>
